@@ -1,35 +1,30 @@
-# Start with a base image of your choice
-FROM ubuntu:20.04
+# Use a base image that has Docker installed, since we're focusing on running VECTR inside a Docker container
+FROM docker:20.10.12
 
-# Install necessary tools (if any) and dependencies
-RUN apt-get update && \
-    apt-get install -y wget unzip && \
-    rm -rf /var/lib/apt/lists/*
+# Install necessary dependencies for VECTR
+RUN apk --no-cache add \
+    ca-certificates \
+    curl \
+    wget \
+    unzip \
+    nano \
+    && rm -rf /var/cache/apk/*
 
-# Create directory for VECTR installation
+# Create directories and download VECTR Runtime
 WORKDIR /opt/vectr
+RUN mkdir -p /opt/vectr \
+    && wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-9.0.2/sra-vectr-runtime-9.0.2-ce.zip \
+    && unzip sra-vectr-runtime-9.0.2-ce.zip \
+    && rm sra-vectr-runtime-9.0.2-ce.zip
 
-# Copy the .env file into the Docker image
-COPY .env .env
+# Copy .env file to set up configuration
+COPY .env /opt/vectr/.env
 
-# Define VECTR_RELEASE variable from .env file
-ARG VECTR_RELEASE
-ENV VECTR_RELEASE=${VECTR_RELEASE}
+# Expose the required ports (adjust as per your application)
+EXPOSE 8081
 
-# Download and extract VECTR
-RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-9.0.2/sra-vectr-runtime-9.0.2-ce.zip && \
-    unzip sra-vectr-runtime-9.0.2-ce.zip && \
-    rm sra-vectr-runtime-9.0.2-ce.zip
+# Command to start VECTR (example using docker-compose)
+CMD ["docker-compose", "up", "-d"]
 
-# Set the working directory to the VECTR installation directory
-WORKDIR /opt/vectr/sra-vectr-runtime-9.0.2-ce
-
-# Optionally, you may need to configure VECTR or set permissions here
-# For example:
-# RUN chmod +x start.sh
-
-# Source the .env file to load environment variables
-ENV $(cat /opt/vectr/.env | xargs)
-
-# Start command (adjust this based on how your application is started)
-CMD ["./start.sh"]
+# Provide instructions for accessing the web app and default credentials
+# Replace with actual instructions once the container is running
