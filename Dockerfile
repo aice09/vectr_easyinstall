@@ -1,29 +1,31 @@
-# Use a base image suitable for your application
-FROM ${VECTR_IMAGE}
+# Start with a base image of your choice
+FROM ubuntu:20.04
 
-# Expose port 8081 for the application
-EXPOSE 8081
+# Install necessary tools (if any) and dependencies
+RUN apt-get update && \
+    apt-get install -y wget unzip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
-ENV VECTR_HOSTNAME=${VECTR_HOSTNAME} \
-    VECTR_PORT=${VECTR_PORT} \
-    POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
-    POSTGRES_USER=${POSTGRES_USER} \
-    POSTGRES_DB=${POSTGRES_DB} \
-    VECTR_DATA_KEY=${VECTR_DATA_KEY} \
-    JWS_KEY=${JWS_KEY} \
-    JWE_KEY=${JWE_KEY} \
-    VECTR_EXTERNAL_HOSTNAME=${VECTR_EXTERNAL_HOSTNAME} \
-    VECTR_EXTERNAL_PORT=${VECTR_EXTERNAL_PORT} \
-    CA_PASS=${CA_PASS} \
-    VECTR_FEATURES_SSLCONF=${VECTR_FEATURES_SSLCONF} \
-    VECTR_SSL_CRT=${VECTR_SSL_CRT} \
-    VECTR_SSL_KEY=${VECTR_SSL_KEY} \
-    RESET_SSL=${RESET_SSL} \
-    RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS}
+# Create directory for VECTR installation
+WORKDIR /opt/vectr
 
-# Optionally, you can add a volume mount here if necessary
-# VOLUME ${VECTR_SSL_CERTS_VOLUME}
+# Copy the .env file into the Docker image
+COPY .env .env
+
+# Download and extract VECTR
+RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-${VECTR_RELEASE}/sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
+    unzip sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
+    rm sra-vectr-runtime-${VECTR_RELEASE}-ce.zip
+
+# Set the working directory to the VECTR installation directory
+WORKDIR /opt/vectr/sra-vectr-runtime-${VECTR_RELEASE}-ce
+
+# Optionally, you may need to configure VECTR or set permissions here
+# For example:
+# RUN chmod +x start.sh
+
+# Source the .env file to load environment variables
+ENV $(cat /opt/vectr/.env | xargs)
 
 # Start command (adjust this based on how your application is started)
-CMD ["your_application_start_command"]
+CMD ["./start.sh"]
