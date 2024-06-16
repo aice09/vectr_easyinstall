@@ -12,6 +12,10 @@ WORKDIR /opt/vectr
 # Copy the .env file into the Docker image
 COPY .env .env
 
+# Define VECTR_RELEASE variable from .env file
+ARG VECTR_RELEASE
+ENV VECTR_RELEASE=${VECTR_RELEASE}
+
 # Download and extract VECTR
 RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-${VECTR_RELEASE}/sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
     unzip sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
