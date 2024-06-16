@@ -17,9 +17,9 @@ ARG VECTR_RELEASE
 ENV VECTR_RELEASE=${VECTR_RELEASE}
 
 # Download and extract VECTR
-RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-${VECTR_RELEASE}/sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
-    unzip sra-vectr-runtime-${VECTR_RELEASE}-ce.zip && \
-    rm sra-vectr-runtime-${VECTR_RELEASE}-ce.zip
+RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-${VECTR_RELEASE}/sra-vectr-runtime-9.0.2-ce.zip && \
+    unzip sra-vectr-runtime-9.0.2-ce.zip && \
+    rm sra-vectr-runtime-9.0.2-ce.zip
 
 # Set the working directory to the VECTR installation directory
 WORKDIR /opt/vectr/sra-vectr-runtime-${VECTR_RELEASE}-ce
