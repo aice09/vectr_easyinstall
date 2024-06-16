@@ -24,7 +24,6 @@ COPY .env /opt/vectr/.env
 EXPOSE 8081
 
 # Command to start VECTR (example using docker-compose)
-CMD ["docker-compose", "up", "-d"]
 
 # Provide instructions for accessing the web app and default credentials
 # Replace with actual instructions once the container is running
