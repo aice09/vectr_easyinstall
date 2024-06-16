@@ -1,5 +1,5 @@
 # Use a base image that has Docker installed, since we're focusing on running VECTR inside a Docker container
-FROM docker:20.10.12
+FROM ubuntu:22.04
 
 # Install necessary dependencies for VECTR
 RUN apk --no-cache add \
@@ -22,8 +22,6 @@ COPY .env /opt/vectr/.env
 
 # Expose the required ports (adjust as per your application)
 EXPOSE 8081
-
-# Command to start VECTR (example using docker-compose)
 
 # Provide instructions for accessing the web app and default credentials
 # Replace with actual instructions once the container is running
