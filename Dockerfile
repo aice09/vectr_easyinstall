@@ -22,7 +22,7 @@ RUN wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-${VE
     rm sra-vectr-runtime-9.0.2-ce.zip
 
 # Set the working directory to the VECTR installation directory
-WORKDIR /opt/vectr/sra-vectr-runtime-${VECTR_RELEASE}-ce
+WORKDIR /opt/vectr/sra-vectr-runtime-9.0.2-ce
 
 # Optionally, you may need to configure VECTR or set permissions here
 # For example:
